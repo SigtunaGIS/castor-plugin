@@ -9,7 +9,7 @@ module.exports = {
       test: /\.(js)$/,
       exclude: /node_modules/,
       loader: 'babel-loader',
-      query: {
+      options: {
         cacheDirectory: false,
         presets: [
           ['@babel/preset-env', {
@@ -17,15 +17,16 @@ module.exports = {
               browsers: ['chrome >= 39']
             },
             modules: false,
-            useBuiltIns: 'usage'
+            useBuiltIns: 'usage', 
+            corejs: 3
           }]
         ],
-        plugins: [
-          ['@babel/plugin-transform-runtime', {
-            regenerator: true,
-            corejs: 2
-          }]
-        ]
+        // plugins: [
+        //   ['@babel/plugin-transform-runtime', {
+        //     regenerator: true,
+        //     corejs: 2
+        //   }]
+        // ]
       }
     }]
   },
@@ -33,9 +34,9 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.scss']
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-    })
-  ]
+  // plugins: [
+  //   new webpack.ProvidePlugin({
+  //     fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
+  //   })
+  // ]
 };

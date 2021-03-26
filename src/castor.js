@@ -1,7 +1,9 @@
 import Origo from 'Origo';
+import CastorApi from './castorApi';
 
-const Castor = function astor(options = {}) {
-  const { buttonText = 'Default text', content = 'Default content' } = options;
+const Castor = function Castor(options = {}) {
+  const { oauth2, exportLayerGroup } = options;
+  console.log('oauth2', oauth2);
 
   const icon = '#fa-pencil';
 
@@ -16,18 +18,50 @@ const Castor = function astor(options = {}) {
   let importButtonEl;
   let exportButtonEl;
 
-
   //Plugin functionality
+
   function importFromCastor() {
+    // const filter = 'objekt_id=97c7eb4b-4bc9-42aa-823c-020599d81279';
+    const filter = "[objekt_id] IN (\"97c7eb4b-4bc9-42aa-823c-020599d81279\")";
+    let url = `http://localhost:9966/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=casto_fastighetsytor_urval&outputFormat=application/json&srsname=EPSG:3011&CQL_FILTER=${encodeURIComponent(filter)}`;
+    console.log(url);
+
     console.log('import');
+    CastorApi.import(oauth2).then((data) => {
+      console.log('import result', data);
+      let layer = new Origo.ol.layer.Vector({source: new Origo.ol.source.Vector({url: url})})
+      viewer.addLayer(layer);
+      console.log('filtered layer', layer)
+    }).catch(console.error);
   }
 
-  function exportFromCastor() {
+  function exportToCastor() {
     console.log('export');
+    const selectionManager = viewer.getSelectionManager();
+    const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayerGroup);
+    const castorData = {
+      destination: 'Castor',
+      name: 'Urval från kartan med lite fastigheter',
+      selectionobjects: items.map(x => ({
+        addresses: [],
+        // "geometry": {
+        //     "x": "6569905,678",
+        //     "y": "4569905,278"
+        // },
+        realestate: {
+          key: x.feature.get('fnr_fds').toString(),
+          name: x.feature.get('fastighet'),
+          uuid: x.feature.get('objekt_id')
+        }
+      })),
+      source: 'Partner',
+      type: 'type'
+    };
+
+    CastorApi.export(oauth2, castorData).then(console.log).catch(console.error);
   }
 
   // Utils and rendering
-
   function toggleActive() {
     if (isActive) {
       castorButtonEl.classList.remove('active');
@@ -94,7 +128,7 @@ const Castor = function astor(options = {}) {
         tooltipText: 'Skicka urval till Castor',
         tooltipPlacement: 'east',
         click() {
-          exportFromCastor();
+          exportToCastor();
         }
       });
     },
