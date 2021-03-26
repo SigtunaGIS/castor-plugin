@@ -19,11 +19,11 @@ const Castor = function astor(options = {}) {
 
   //Plugin functionality
   function importFromCastor() {
-    console.log('import')
+    console.log('import');
   }
 
   function exportFromCastor() {
-    console.log('export')
+    console.log('export');
   }
 
   // Utils and rendering
