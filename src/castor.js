@@ -2,10 +2,8 @@ import Origo from 'Origo';
 import CastorApi from './castorApi';
 
 const Castor = function Castor(options = {}) {
-  const { oauth2, exportLayerGroup } = options;
+  const { oauth2, exportLayerGroup, castorImportGroupOptions, castorImportLayerOptions, filterPropertyName, mainIcon = '#fa-pencil', importIcon = '#fa-share', exportIcon = '#fa-reply' } = options;
   console.log('oauth2', oauth2);
-
-  const icon = '#fa-pencil';
 
   let viewer;
   let target;
@@ -18,25 +16,38 @@ const Castor = function Castor(options = {}) {
   let importButtonEl;
   let exportButtonEl;
 
+  let castorLayerNumber = 1;
+  let legendGroupAdded = false;
+
+  if (!oauth2 || !exportLayerGroup || !castorImportGroupOptions || !castorImportLayerOptions || !filterPropertyName)
+    return undefined;
+
   //Plugin functionality
 
   function importFromCastor() {
-    // const filter = 'objekt_id=97c7eb4b-4bc9-42aa-823c-020599d81279';
-    const filter = "[objekt_id] IN (\"97c7eb4b-4bc9-42aa-823c-020599d81279\")";
-    let url = `http://localhost:9966/geoserver/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=casto_fastighetsytor_urval&outputFormat=application/json&srsname=EPSG:3011&CQL_FILTER=${encodeURIComponent(filter)}`;
-    console.log(url);
-
-    console.log('import');
-    CastorApi.import(oauth2).then((data) => {
-      console.log('import result', data);
-      let layer = new Origo.ol.layer.Vector({source: new Origo.ol.source.Vector({url: url})})
-      viewer.addLayer(layer);
-      console.log('filtered layer', layer)
-    }).catch(console.error);
+    CastorApi.import(oauth2)
+      .then(data => {
+        if (!legendGroupAdded && castorImportGroupOptions && castorImportGroupOptions.name) {
+          viewer.addGroup(castorImportGroupOptions);
+          legendGroupAdded = true;
+        }
+        const ids = data.selectionobjects.map(s => "'" + s.realestate.uuid + "'");
+        const filter = `${filterPropertyName} in (${ids.join(',')})`;
+        viewer.addLayer({
+          ...castorImportLayerOptions,
+          name: castorImportLayerOptions.name + `__castor_${castorLayerNumber}`,
+          title:
+            castorLayerNumber > 1
+              ? castorImportLayerOptions.title + ` ${castorLayerNumber}`
+              : castorImportLayerOptions.title,
+          filter
+        });
+        castorLayerNumber++;
+      })
+      .catch(console.error);
   }
 
   function exportToCastor() {
-    console.log('export');
     const selectionManager = viewer.getSelectionManager();
     const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayerGroup);
     const castorData = {
@@ -44,10 +55,6 @@ const Castor = function Castor(options = {}) {
       name: 'Urval från kartan med lite fastigheter',
       selectionobjects: items.map(x => ({
         addresses: [],
-        // "geometry": {
-        //     "x": "6569905,678",
-        //     "y": "4569905,278"
-        // },
         realestate: {
           key: x.feature.get('fnr_fds').toString(),
           name: x.feature.get('fastighet'),
@@ -99,22 +106,16 @@ const Castor = function Castor(options = {}) {
       castorButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow',
         click() {
-          //   modal = Origo.ui.Modal({
-          //     title: buttonText,
-          //     content,
-          //     target: viewer.getId()
-          //   });
-          //   this.addComponent(modal);
           toggleActive();
           console.log('clicked');
         },
-        icon,
+        mainIcon,
         tooltipText: 'Castor',
         tooltipPlacement: 'east'
       });
       importButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: '#fa-share',
+        icon: importIcon,
         tooltipText: 'Hämta urval från Castor',
         tooltipPlacement: 'east',
         click() {
@@ -124,7 +125,7 @@ const Castor = function Castor(options = {}) {
 
       exportButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: '#fa-reply',
+        icon: exportIcon,
         tooltipText: 'Skicka urval till Castor',
         tooltipPlacement: 'east',
         click() {
