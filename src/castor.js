@@ -2,8 +2,16 @@ import Origo from 'Origo';
 import CastorApi from './castorApi';
 
 const Castor = function Castor(options = {}) {
-  const { oauth2, exportLayerGroup, castorImportGroupOptions, castorImportLayerOptions, filterPropertyName, mainIcon = '#fa-pencil', importIcon = '#fa-share', exportIcon = '#fa-reply' } = options;
-  console.log('oauth2', oauth2);
+  const {
+    oauth2,
+    exportLayerGroup,
+    castorImportGroupOptions,
+    castorImportLayerOptions,
+    filterPropertyName,
+    mainIcon = '#fa-pencil',
+    importIcon = '#fa-share',
+    exportIcon = '#fa-reply'
+  } = options;
 
   let viewer;
   let target;
@@ -107,9 +115,8 @@ const Castor = function Castor(options = {}) {
         cls: 'padding-small icon-smaller round light box-shadow',
         click() {
           toggleActive();
-          console.log('clicked');
         },
-        mainIcon,
+        icon: mainIcon,
         tooltipText: 'Castor',
         tooltipPlacement: 'east'
       });
