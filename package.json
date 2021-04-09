@@ -1,0 +1,32 @@
+{
+  "name": "castor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "castor.js",
+  "scripts": {
+    "start": "npm run watch-js",
+    "watch-js": "webpack-cli serve --config ./tasks/webpack.dev.js --mode development",
+    "build": "webpack --config ./tasks/webpack.prod.js",
+    "build:dev": "webpack --config ./tasks/webpack.dev.js --mode development"
+  },
+  "author": "DecernoAB",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.17",
+    "@babel/plugin-transform-runtime": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "babel-loader": "^8.2.2",
+    "exports-loader": "^2.0.0",
+    "imports-loader": "^2.0.0",
+    "uglify-js": "^3.12.8",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.23.0",
+    "webpack-bundle-analyzer": "^4.4.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  },
+  "dependencies": {
+    "core-js": "^3.9.0"
+  }
+}
