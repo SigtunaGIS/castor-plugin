@@ -1,6 +1,9 @@
 # Castor plugin
 
-This is just an example plugin
+PLEASE NOTE THAT THIS IS A BETA VERSION.
+
+Plugin for Castor using rest-API for Castor. Requires Origo 2.1.1 or later. The plugin must be used with the plugin for OpenID connect for authorization.
+With this plugin a user can send selected real estates in Origo to Castor for further handling. Selections made in Castor can be sent och viewed as a layer in Origo. 
 
 #### Example usage of Castor plugin
 
@@ -18,17 +21,61 @@ This is just an example plugin
     <div id="app-wrapper">
     </div>
     <script src="js/origo.js"></script>
-    <script src="plugins/castor.js"></script>
+    <script src="plugins/oidc.min.js"></script>
+    <script src="plugins/castor.min.js"></script>
 
     <script type="text/javascript">
-      //Init origo
-      var origo = Origo('index.json');
-      origo.on('load', function (viewer) {
-        var castor = Castor({
-          buttonText: 'Click this!',
-          content: 'Just nonsense'
-        });
-        viewer.addComponent(castor);
-      });
+     //Init origo
+		Oidc.createOidcAuth(
+        {
+          externalSessionUrl: 'https://xxx',
+          updateSessionOnRefresh: true,
+          sessionRefreshTimeout: 59,
+          tokenEndpoint: '/origoserver/auth/access_token',
+          authorizeEndpoint: '/origoserver/auth/authorize'
+        },
+        client => {
+          if (client.getUser().authenticated) {
+            var origo = Origo('index.json');
+            var oidcComponent = Oidc.OidcComponent(client);
+            origo.on('load', function (viewer) {
+              //init castor-plugin
+			  var castorPlugin = Castor({
+                oauth2: client,
+                exportLayerGroup: 'xxx',
+                filterPropertyName: 'objekt_id',
+                mainIcon: 'img/png/castor.png',
+                importIcon: '#fa-share',
+                exportIcon: '#fa-reply',
+                castorImportGroupOptions: {
+                  name: 'castor',
+                  title: 'Castor import',
+                  expanded: false
+                    },
+                castorImportLayerOptions: {
+                  name: 'xxx',
+                  title: 'Castor import',
+                  group: 'castor',
+                  source: 'xxx',
+                  style: 'default',
+                  geometryName: 'the_geom',
+                  type: 'WFS',
+                  visible: true,
+                  legend: true,
+                  removable: true
+                },
+                castorEndpoint: 'url...'
+                  });
+
+              viewer.addComponent(oidcComponent);
+              viewer.addComponent(castorPlugin);
+              });
+            }
+            else {
+                client.authorize();
+              }
+            }
+          );
     </script>
 ```
+
