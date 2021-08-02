@@ -12,8 +12,19 @@ async function castorImport(oauth2) {
     }
   });
   if (response.ok) {
-    return await response.json();
+    const result = await response.json();
+    if (result === null) {
+      throw {
+        status: 404,
+      }
+    }
+    return result;
   }
+  const message = await response.text();
+  throw {
+    status: response.status,
+    message
+  };
 }
 
 async function castorExport(oauth2, data) {
@@ -26,8 +37,19 @@ async function castorExport(oauth2, data) {
     body: JSON.stringify(data)
   });
   if (response.ok) {
+    const result = await response.json();
+    if (result === null) {
+      throw {
+        status: 404,
+      }
+    }
     return;
   }
+  const message = await response.text();
+  throw {
+    status: response.status,
+    message
+  };
 }
 
 const CastorApi = {
