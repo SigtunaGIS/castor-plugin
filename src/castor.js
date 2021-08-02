@@ -7,6 +7,7 @@ const Castor = function Castor(options = {}) {
     exportLayerGroup,
     castorImportGroupOptions,
     castorImportLayerOptions,
+    realestatePropertyName,
     filterPropertyName,
     mainIcon = '#fa-pencil',
     importIcon = '#fa-share',
@@ -33,6 +34,7 @@ const Castor = function Castor(options = {}) {
     !exportLayerGroup ||
     !castorImportGroupOptions ||
     !castorImportLayerOptions ||
+    !realestatePropertyName ||
     !filterPropertyName ||
     !castorEndpoint
   )
@@ -49,7 +51,7 @@ const Castor = function Castor(options = {}) {
           viewer.addGroup(castorImportGroupOptions);
           legendGroupAdded = true;
         }
-        const ids = data.selectionobjects.map(s => "'" + s.realestate.uuid + "'");
+        const ids = data.selectionobjects.map(s => "'" + s.realestate[realestatePropertyName] + "'");
         const filter = `${filterPropertyName} in (${ids.join(',')})`;
         viewer.addLayer({
           ...castorImportLayerOptions,
