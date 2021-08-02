@@ -10,7 +10,8 @@ const Castor = function Castor(options = {}) {
     filterPropertyName,
     mainIcon = '#fa-pencil',
     importIcon = '#fa-share',
-    exportIcon = '#fa-reply'
+    exportIcon = '#fa-reply',
+    castorEndpoint
   } = options;
 
   let viewer;
@@ -27,8 +28,17 @@ const Castor = function Castor(options = {}) {
   let castorLayerNumber = 1;
   let legendGroupAdded = false;
 
-  if (!oauth2 || !exportLayerGroup || !castorImportGroupOptions || !castorImportLayerOptions || !filterPropertyName)
+  if (
+    !oauth2 ||
+    !exportLayerGroup ||
+    !castorImportGroupOptions ||
+    !castorImportLayerOptions ||
+    !filterPropertyName ||
+    !castorEndpoint
+  )
     return undefined;
+
+  CastorApi.init({ castorEndpoint });
 
   //Plugin functionality
 
