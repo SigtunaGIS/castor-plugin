@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: [
@@ -39,4 +40,11 @@ module.exports = {
   //     fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
   //   })
   // ]
+  plugins:[
+    new CopyPlugin({
+      patterns: [
+        { from: "static", to: "./" },
+      ],
+    })
+  ]
 };
