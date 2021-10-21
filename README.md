@@ -3,7 +3,7 @@
 PLEASE NOTE THAT THIS IS A BETA VERSION.
 
 Plugin for Castor using rest-API for Castor. Requires Origo 2.1.1 or later. The plugin must be used with the plugin for OpenID connect for authorization.
-With this plugin a user can send selected real estates in Origo to Castor for further handling. Selections made in Castor can be sent och viewed as a layer in Origo. 
+With this plugin a user can send selected real estates in Origo to Castor for further handling. Selections made in Castor can be sent and viewed as a layer in Origo. 
 
 #### Example usage of Castor plugin
 
