@@ -44,8 +44,16 @@ const Castor = function Castor(options = {}) {
     !realestatePropertyName ||
     !filterPropertyName ||
     !castorEndpoint
-  )
+  ) {
+    if (!oauth2) console.error('Castor plugin: Missing config oath2');
+    if (!exportLayerGroup) console.error('Castor plugin: Missing config exportLayerGroup');
+    if (!castorImportGroupOptions) console.error('Castor plugin: Missing config castorImportGroupOptions');
+    if (!castorImportLayerOptions) console.error('Castor plugin: Missing config castorImportLayerOptions');
+    if (!realestatePropertyName) console.error('Castor plugin: Missing config realestatePropertyName');
+    if (!filterPropertyName) console.error('Castor plugin: Missing config filterPropertyName');
+    if (!castorEndpoint) console.error('Castor plugin: Missing config castorEndpoint');
     return undefined;
+  }
 
   CastorApi.init({ castorEndpoint });
 
