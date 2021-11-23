@@ -36,7 +36,8 @@ const Castor = function Castor(options = {}) {
 
   let castorLayerNumber = 1;
   let legendGroupAdded = false;
-  const MAX_RETRIES = 10;
+  const max_center_on_added_layer_retries = 10;
+  
   let tries = 0;
 
   if (
@@ -143,7 +144,7 @@ const Castor = function Castor(options = {}) {
       return;
     }
 
-    if (tries < MAX_RETRIES) {
+    if (tries < max_center_on_added_layer_retries) {
       tries++;
       console.log(`Castor - center try number ${tries}`);
       setTimeout(() => { centerOnAddedLayer(viewer, layerName); }, 1000);
