@@ -1,5 +1,6 @@
 import Origo from 'Origo';
 import CastorApi from './castorApi';
+import {extend} from 'ol/extent';
 
 const Castor = function Castor(options = {}) {
   const {
@@ -35,6 +36,8 @@ const Castor = function Castor(options = {}) {
 
   let castorLayerNumber = 1;
   let legendGroupAdded = false;
+  const MAX_RETRIES = 10;
+  let tries = 0;
 
   if (
     !oauth2 ||
@@ -91,17 +94,26 @@ const Castor = function Castor(options = {}) {
         }
         const ids = data.selectionobjects.map(s => "'" + s.realestate[realestatePropertyName] + "'");
         const filter = `${filterPropertyName} in (${ids.join(',')})`;
+        const layerName = castorImportLayerOptions.name + `__castor_${castorLayerNumber}`;
         viewer.addLayer({
           ...castorImportLayerOptions,
-          name: castorImportLayerOptions.name + `__castor_${castorLayerNumber}`,
+          name: layerName,
           title:
             castorLayerNumber > 1
               ? castorImportLayerOptions.title + ` ${castorLayerNumber}`
               : castorImportLayerOptions.title,
-          filter
+          filter,
+          strategy: castorImportLayerOptions.strategy === undefined 
+                    ? 'all' 
+                    : castorImportLayerOptions.strategy,
         });
         castorLayerNumber++;
         createToaster('ok', castorImportSuccessMessage);
+
+        if (castorImportLayerOptions.visible) {
+          tries = 0;
+          setTimeout(() => { centerOnAddedLayer(viewer, layerName); }, 1000);
+        }
       })
       .catch(error => {
         switch (error.status) {
@@ -116,6 +128,26 @@ const Castor = function Castor(options = {}) {
             break;
         }
       });
+  }
+
+  function centerOnAddedLayer(viewer, layerName) {
+    const addedLayer = viewer.getLayer(layerName);
+    const features = addedLayer.getSource().getFeatures();
+    if (features && features.length) {
+      let baseExtend = features.pop().getGeometry().getExtent();
+      features.forEach((feature) => {
+        extend(baseExtend, feature.getGeometry().getExtent());
+      });
+
+      viewer.getMap().getView().fit(baseExtend);
+      return;
+    }
+
+    if (tries < MAX_RETRIES) {
+      tries++;
+      console.log(`Castor - center try number ${tries}`);
+      setTimeout(() => { centerOnAddedLayer(viewer, layerName); }, 1000);
+    }
   }
 
   function exportToCastor() {
