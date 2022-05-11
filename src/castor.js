@@ -219,9 +219,28 @@ const Castor = function Castor(options = {}) {
     exportButtonEl = document.getElementById(exportButton.getId());
   }
 
+  function addSvgIcons() {
+    const svgIcons = `
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="file_download" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"/>
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+      </symbol>
+      <symbol id="publish" viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none"/>
+      <path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>
+    </symbol>
+    </svg>
+    `;
+    const div = document.createElement('div');
+    div.innerHTML = svgIcons;
+    document.body.insertBefore(div, document.body.childNodes[0]);
+  }
+
   return Origo.ui.Component({
     name: 'castor',
     onInit() {
+      addSvgIcons();
       isActive = false;
       castorButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow',
@@ -234,7 +253,7 @@ const Castor = function Castor(options = {}) {
       });
       importButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: importIcon,
+        icon: '#file_download',
         tooltipText: 'Hämta urval från Castor',
         tooltipPlacement: 'east',
         click() {
@@ -244,7 +263,7 @@ const Castor = function Castor(options = {}) {
 
       exportButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: exportIcon,
+        icon: '#publish',
         tooltipText: 'Skicka urval till Castor',
         tooltipPlacement: 'east',
         click() {
