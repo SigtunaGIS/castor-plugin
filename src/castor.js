@@ -11,8 +11,8 @@ const Castor = function Castor(options = {}) {
     realestatePropertyName,
     filterPropertyName,
     mainIcon = '#fa-pencil',
-    importIcon = '#fa-share',
-    exportIcon = '#fa-reply',
+    importIcon = '',
+    exportIcon = '',
     castorEndpoint,
     castorImportSuccessMessage,
     castorImportFailMessage,
@@ -253,7 +253,7 @@ const Castor = function Castor(options = {}) {
       });
       importButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: '#file_download',
+        icon: importIcon,
         tooltipText: 'Hämta urval från Castor',
         tooltipPlacement: 'east',
         click() {
@@ -263,7 +263,7 @@ const Castor = function Castor(options = {}) {
 
       exportButton = Origo.ui.Button({
         cls: 'padding-small icon-smaller round light box-shadow hidden',
-        icon: '#publish',
+        icon: exportIcon,
         tooltipText: 'Skicka urval till Castor',
         tooltipPlacement: 'east',
         click() {
