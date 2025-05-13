@@ -156,7 +156,7 @@ const Castor = function Castor(options = {}) {
     const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
     const castorData = {
       destination: 'Castor',
-      name: 'Urval från kartan med lite fastigheter',
+      name: 'Selekterade fastigheter från kartan',
       selectionobjects: items.map(x => ({
         addresses: [],
         realestate: {
