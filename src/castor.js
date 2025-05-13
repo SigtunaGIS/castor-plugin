@@ -5,7 +5,7 @@ import {extend} from 'ol/extent';
 const Castor = function Castor(options = {}) {
   const {
     oauth2,
-    exportLayerGroup,
+    exportLayer,
     castorImportGroupOptions,
     castorImportLayerOptions,
     realestatePropertyName,
@@ -42,7 +42,7 @@ const Castor = function Castor(options = {}) {
 
   if (
     !oauth2 ||
-    !exportLayerGroup ||
+    !exportLayer ||
     !castorImportGroupOptions ||
     !castorImportLayerOptions ||
     !realestatePropertyName ||
@@ -50,7 +50,7 @@ const Castor = function Castor(options = {}) {
     !castorEndpoint
   ) {
     if (!oauth2) console.error('Castor plugin: Missing config oath2');
-    if (!exportLayerGroup) console.error('Castor plugin: Missing config exportLayerGroup');
+    if (!exportLayer) console.error('Castor plugin: Missing config exportLayer');
     if (!castorImportGroupOptions) console.error('Castor plugin: Missing config castorImportGroupOptions');
     if (!castorImportLayerOptions) console.error('Castor plugin: Missing config castorImportLayerOptions');
     if (!realestatePropertyName) console.error('Castor plugin: Missing config realestatePropertyName');
@@ -153,7 +153,7 @@ const Castor = function Castor(options = {}) {
 
   function exportToCastor() {
     const selectionManager = viewer.getSelectionManager();
-    const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayerGroup);
+    const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
     const castorData = {
       destination: 'Castor',
       name: 'Urval från kartan med lite fastigheter',
