@@ -41,7 +41,7 @@ With this plugin a user can send selected real estates in Origo to Castor for fu
               //Init castor-plugin
               var castorPlugin = Castor({
                 oauth2: client,
-                exportLayerGroup: 'layer_group',
+                exportLayer: 'layer_name',
                 realestatePropertyName: 'key',
                 filterPropertyName: 'fnr_fds',
                 mainIcon: '/plugins/castor-icon.png',
