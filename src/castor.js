@@ -6,6 +6,7 @@ const Castor = function Castor(options = {}) {
   const {
     oauth2,
     exportLayer,
+    exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
     castorImportLayerOptions,
     realestatePropertyName,
@@ -160,9 +161,9 @@ const Castor = function Castor(options = {}) {
       selectionobjects: items.map(x => ({
         addresses: [],
         realestate: {
-          key: x.feature.get('fnr_fds').toString(),
-          name: x.feature.get('fastighet'),
-          uuid: x.feature.get('objekt_id')
+          key: x.feature.get(exportAttributes[0]).toString(),
+          name: x.feature.get(exportAttributes[1]),
+          uuid: x.feature.get(exportAttributes[2])
         }
       })),
       source: 'Partner',
