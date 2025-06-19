@@ -1,6 +1,6 @@
 import Origo from 'Origo';
 import CastorApi from './castorApi';
-import {extend} from 'ol/extent';
+import {extend, getCenter} from 'ol/extent';
 
 const Castor = function Castor(options = {}) {
   const {
@@ -141,16 +141,16 @@ const Castor = function Castor(options = {}) {
         extend(baseExtend, feature.getGeometry().getExtent());
       });
 
-      const view = viewer.getMap().getView();
-      const center = ol.extent.getCenter(baseExtend);
-      
-      view.animate({
-        center: center,
-        duration: 1000 // Milliseconds for the panning animation
-      });
-      
-      return;
-    }
+    const view = viewer.getMap().getView();
+    const center = getCenter(baseExtend);
+    
+    view.animate({
+      center: center,
+      duration: 1000 // Milliseconds for the panning animation
+    });
+    
+    return;
+  }
 
     if (tries < max_center_on_added_layer_retries) {
       tries++;
