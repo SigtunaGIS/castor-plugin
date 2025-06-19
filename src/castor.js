@@ -141,7 +141,14 @@ const Castor = function Castor(options = {}) {
         extend(baseExtend, feature.getGeometry().getExtent());
       });
 
-      viewer.getMap().getView().fit(baseExtend);
+      const view = viewer.getMap().getView();
+      const center = ol.extent.getCenter(baseExtend);
+      
+      view.animate({
+        center: center,
+        duration: 1000 // Milliseconds for the panning animation
+      });
+      
       return;
     }
 
