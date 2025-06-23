@@ -42,6 +42,7 @@ With this plugin a user can send selected real estates in Origo to Castor for fu
               var castorPlugin = Castor({
                 oauth2: client,
                 exportLayer: 'layer_name',
+                exportAttributes = ['attribut 1', 'attribut 2', 'attribut 3'],
                 realestatePropertyName: 'key',
                 filterPropertyName: 'fnr_fds',
                 mainIcon: '/plugins/castor-icon.png',
@@ -65,6 +66,7 @@ With this plugin a user can send selected real estates in Origo to Castor for fu
                   removable: true
                 },
                 castorEndpoint: 'url',
+                castorNoSelection: 'Ingen fastighet vald',
                 castorImportSuccessMessage: 'Urval hämtat från Castor',
                 castorImportFailMessage: 'Okänt fel, kunde inte hämta urval från Castor',
                 castorImportNotFoundMessage: 'Inget urval från Castor hittades',

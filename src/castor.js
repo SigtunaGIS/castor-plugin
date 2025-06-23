@@ -15,6 +15,7 @@ const Castor = function Castor(options = {}) {
     importIcon = '',
     exportIcon = '',
     castorEndpoint,
+    castorNoSelection,
     castorImportSuccessMessage,
     castorImportFailMessage,
     castorImportNotFoundMessage,
@@ -164,6 +165,13 @@ const Castor = function Castor(options = {}) {
   function exportToCastor() {
     const selectionManager = viewer.getSelectionManager();
     const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
+
+    // Check if no items are selected
+    if (!items || items.length === 0) {
+      createToaster('fail', castorNoSelection);
+      return;
+  }
+
     const castorData = {
       destination: 'Castor',
       name: 'Selekterade fastigheter från kartan',
