@@ -147,10 +147,17 @@ const Castor = function Castor(options = {}) {
     const padding = 10; // Padding around the extent
     const duration = 1000; // Animation duration in milliseconds
     
-    view.animate({
-      center: center,
+  // Animate to the center of the extent first
+  view.animate({
+    center: center,
+    duration: duration
+  }, () => {
+    // After the animation, fit the view to the extent with padding
+    view.fit(baseExtent, {
+      padding: padding,
       duration: duration
     });
+  });
     
     return;
   }
