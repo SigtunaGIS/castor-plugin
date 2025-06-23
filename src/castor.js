@@ -143,10 +143,12 @@ const Castor = function Castor(options = {}) {
 
     const view = viewer.getMap().getView();
     const center = getCenter(baseExtend);
+    const padding = 10; // Padding around the extent
+    const duration = 1000; // Animation duration in milliseconds
     
-    view.animate({
+    view.fit(baseExtent, { padding: padding, duration: duration }).animate({
       center: center,
-      duration: 1000 // Milliseconds for the panning animation
+      duration: duration
     });
     
     return;
