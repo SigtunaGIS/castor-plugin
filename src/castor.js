@@ -150,10 +150,6 @@ const Castor = function Castor(options = {}) {
       center: center,
       duration: duration
     });
-
-    view.fit(baseExtent, {
-      padding: padding
-    });
     
     return;
   }
