@@ -136,18 +136,23 @@ const Castor = function Castor(options = {}) {
     const addedLayer = viewer.getLayer(layerName);
     const features = addedLayer.getSource().getFeatures();
     if (features && features.length) {
-      let baseExtend = features.pop().getGeometry().getExtent();
+      let baseExtent = features.pop().getGeometry().getExtent();
       features.forEach((feature) => {
-        extend(baseExtend, feature.getGeometry().getExtent());
+        extend(baseExtent, feature.getGeometry().getExtent());
       });
 
     const view = viewer.getMap().getView();
-    const center = getCenter(baseExtend);
+    const center = getCenter(baseExtent);
     const padding = 10; // Padding around the extent
     const duration = 1000; // Animation duration in milliseconds
     
-    view.fit(baseExtent, { padding: padding, duration: duration }).animate({
+    view.animate({
       center: center,
+      duration: duration
+    });
+
+    view.fit(baseExtent, {
+      padding: padding,
       duration: duration
     });
     
