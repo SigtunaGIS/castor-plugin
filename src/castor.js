@@ -152,8 +152,7 @@ const Castor = function Castor(options = {}) {
     });
 
     view.fit(baseExtent, {
-      padding: padding,
-      duration: duration
+      padding: padding
     });
     
     return;
@@ -288,7 +287,7 @@ const Castor = function Castor(options = {}) {
     },
     onAdd(evt) {
       viewer = evt.target;
-      if (!target) target = `${viewer.getMain().getNavigation().getId()}`;
+      if (!target) target = `${viewer.getMain().getMapTools().getId()}`;
       this.addComponents([castorButton, importButton, exportButton]);
       this.render();
     },
