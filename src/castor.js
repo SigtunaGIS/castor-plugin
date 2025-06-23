@@ -136,6 +136,8 @@ const Castor = function Castor(options = {}) {
   function centerOnAddedLayer(viewer, layerName) {
     const addedLayer = viewer.getLayer(layerName);
     const features = addedLayer.getSource().getFeatures();
+    let baseExtent;
+
     if (features && features.length) {
       let baseExtent = features.pop().getGeometry().getExtent();
       features.forEach((feature) => {
