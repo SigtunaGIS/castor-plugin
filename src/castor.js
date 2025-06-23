@@ -6,6 +6,7 @@ const Castor = function Castor(options = {}) {
   const {
     oauth2,
     exportLayer,
+    exportLayerPadding = [],
     exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
     castorImportLayerOptions,
@@ -144,7 +145,6 @@ const Castor = function Castor(options = {}) {
 
     const view = viewer.getMap().getView();
     const center = getCenter(baseExtent);
-    const padding = [10, 10, 10, 10]; // Padding around the extent
     const duration = 1000; // Animation duration in milliseconds
     
     view.animate({
@@ -152,7 +152,7 @@ const Castor = function Castor(options = {}) {
       duration: duration
     });
     view.fit(baseExtent, {
-      padding: padding,
+      padding: exportLayerPadding,
       duration: duration
     });
     
