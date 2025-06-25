@@ -182,9 +182,9 @@ const Castor = function Castor(options = {}) {
       selectionobjects: items.map(x => ({
         addresses: [],
         realestate: {
-          key: x.feature.get(exportAttributes[0]).toString(),
-          name: x.feature.get(exportAttributes[1]),
-          uuid: x.feature.get(exportAttributes[2])
+          key: x.feature.get(exportAttributes[0])?.toString() || '',
+          name: x.feature.get(exportAttributes[1]) || '',
+          uuid: x.feature.get(exportAttributes[2]) || ''
         }
       })),
       source: 'Partner',
