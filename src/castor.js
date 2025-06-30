@@ -176,6 +176,16 @@ const Castor = function Castor(options = {}) {
       return;
   }
 
+    //Looks for layer in groupLayers and sets it visible if found
+    viewer.getGroupLayers().forEach((groupLayer) => {
+      groupLayer.getLayers().forEach((layer) => {
+        if (layer.getProperties().name === item.exportLayer) {
+          groupLayer.setVisible(true);
+        }
+      });
+    });
+    viewer.getLayer(item.exportLayer).setVisible(true);
+
     const castorData = {
       destination: 'Castor',
       name: 'Selekterade fastigheter från kartan',
