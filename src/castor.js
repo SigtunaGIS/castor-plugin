@@ -184,7 +184,6 @@ const Castor = function Castor(options = {}) {
         }
       });
     });
-    viewer.getLayer(items.exportLayer).setVisible(true);
 
     const castorData = {
       destination: 'Castor',
