@@ -179,12 +179,12 @@ const Castor = function Castor(options = {}) {
     //Looks for layer in groupLayers and sets it visible if found
     viewer.getGroupLayers().forEach((groupLayer) => {
       groupLayer.getLayers().forEach((layer) => {
-        if (layer.getProperties().name === item.exportLayer) {
+        if (layer.getProperties().name === items.exportLayer) {
           groupLayer.setVisible(true);
         }
       });
     });
-    viewer.getLayer(item.exportLayer).setVisible(true);
+    viewer.getLayer(items.exportLayer).setVisible(true);
 
     const castorData = {
       destination: 'Castor',
