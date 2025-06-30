@@ -176,17 +176,10 @@ const Castor = function Castor(options = {}) {
       return;
   }
 
-  // Check if exportLayer is within a group layer type "group"
-  let found = false;
   viewer.getGroupLayers().forEach((groupLayer) => {
-    if (groupLayer.getProperties().type === 'group') {
-      groupLayer.getLayers().forEach((layer) => {
-        if (layer.getProperties().name === items.exportLayer) {
-          groupLayer.setVisible(true);
-          found = true;
-        }
-      });
-    }
+    groupLayer.getLayers().forEach((layer) => {
+      console.log('Layer Properties:', layer.getProperties());
+    });
   });
 
   // If not found, return a failure message
