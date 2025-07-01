@@ -175,18 +175,8 @@ const Castor = function Castor(options = {}) {
       createToaster('fail', castorNoSelection);
       return;
   }
+  console.log('Castor - exportToCastor', items);
 
-  viewer.getGroupLayers().forEach((groupLayer) => {
-    groupLayer.getLayers().forEach((layer) => {
-      console.log('Layer Properties:', layer.getProperties());
-    });
-  });
-
-  // If not found, return a failure message
-  if (!found) {
-    createToaster('fail', 'Layer not found within group type layers');
-    return;
-  }
 
     const castorData = {
       destination: 'Castor',
