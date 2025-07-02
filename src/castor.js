@@ -6,7 +6,7 @@ const Castor = function Castor(options = {}) {
   const {
     oauth2,
     exportLayer,
-    exportLayerPadding = [],
+    importLayerPadding = [200, 200, 200, 200],
     exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
     castorImportLayerOptions,
@@ -152,7 +152,7 @@ const Castor = function Castor(options = {}) {
       duration: duration
     });
     view.fit(baseExtent, {
-      padding: exportLayerPadding,
+      padding: importLayerPadding,
       duration: duration
     });
     

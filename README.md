@@ -43,7 +43,7 @@ With this plugin a user can send selected real estates in Origo to Castor for fu
                 oauth2: client,
                 exportLayer: 'layer_name',
                 exportAttributes = ['attribut 1', 'attribut 2', 'attribut 3'],
-                exportLayerPadding = [150, 150, 150, 150],
+                exportLayerPadding = [200, 200, 200, 200],
                 realestatePropertyName: 'key',
                 filterPropertyName: 'fnr_fds',
                 mainIcon: '/plugins/castor-icon.png',
