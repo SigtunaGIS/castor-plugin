@@ -6,6 +6,7 @@ const Castor = function Castor(options = {}) {
   const {
     oauth2,
     exportLayer,
+    exportGroupLayer,
     importLayerPadding = [200, 200, 200, 200],
     exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
@@ -169,14 +170,22 @@ const Castor = function Castor(options = {}) {
   function exportToCastor() {
     const selectionManager = viewer.getSelectionManager();
     const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
+    const groupItems = selectionManager.getSelectedItemsForASelectionGroup(exportGroupLayer);
+
+    //  append groupItems to items
+    if (groupItems && groupItems.length > 0) {
+      groupItems.forEach(item => {
+        if (!items.some(x => x.feature.getId() === item.feature.getId())) {
+          items.push(item);
+        }
+      });
+    }
 
     // Check if no items are selected
     if (!items || items.length === 0) {
       createToaster('fail', castorNoSelection);
       return;
   }
-  console.log('Castor - exportToCastor', items);
-
 
     const castorData = {
       destination: 'Castor',
