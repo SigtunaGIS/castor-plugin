@@ -6,7 +6,8 @@ const Castor = function Castor(options = {}) {
   const {
     oauth2,
     exportLayer,
-    exportLayerPadding = [],
+    exportGroupLayer,
+    importLayerPadding = [200, 200, 200, 200],
     exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
     castorImportLayerOptions,
@@ -150,11 +151,12 @@ const Castor = function Castor(options = {}) {
     view.animate({
       center: center,
       duration: duration
-    });
-    view.fit(baseExtent, {
-      padding: exportLayerPadding,
-      duration: duration
-    });
+  }, () => {
+      view.fit(baseExtent, {
+          padding: importLayerPadding,
+          duration: duration
+      });
+  });
     
     return;
   }
@@ -169,6 +171,16 @@ const Castor = function Castor(options = {}) {
   function exportToCastor() {
     const selectionManager = viewer.getSelectionManager();
     const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
+    const groupItems = selectionManager.getSelectedItemsForASelectionGroup(exportGroupLayer);
+
+    //  append groupItems to items
+    if (groupItems && groupItems.length > 0) {
+      groupItems.forEach(item => {
+        if (!items.some(x => x.feature.getId() === item.feature.getId())) {
+          items.push(item);
+        }
+      });
+    }
 
     // Check if no items are selected
     if (!items || items.length === 0) {
@@ -182,9 +194,9 @@ const Castor = function Castor(options = {}) {
       selectionobjects: items.map(x => ({
         addresses: [],
         realestate: {
-          key: x.feature.get(exportAttributes[0]).toString(),
-          name: x.feature.get(exportAttributes[1]),
-          uuid: x.feature.get(exportAttributes[2])
+          key: x.feature.get(exportAttributes[0])?.toString() || '',
+          name: x.feature.get(exportAttributes[1]) || '',
+          uuid: x.feature.get(exportAttributes[2]) || ''
         }
       })),
       source: 'Partner',
