@@ -151,11 +151,12 @@ const Castor = function Castor(options = {}) {
     view.animate({
       center: center,
       duration: duration
-    });
-    view.fit(baseExtent, {
-      padding: importLayerPadding,
-      duration: duration
-    });
+  }, () => {
+      view.fit(baseExtent, {
+          padding: importLayerPadding,
+          duration: duration
+      });
+  });
     
     return;
   }
