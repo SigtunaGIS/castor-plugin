@@ -9,7 +9,7 @@
     "build": "webpack --config ./tasks/webpack.prod.js",
     "build:dev": "webpack --config ./tasks/webpack.dev.js --mode development"
   },
-  "author": "DecernoAB",
+  "author": "Decerno AB",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.28.4",
