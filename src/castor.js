@@ -1,11 +1,14 @@
 import Origo from 'Origo';
 import CastorApi from './castorApi';
-import {extend} from 'ol/extent';
+import {extend, getCenter} from 'ol/extent';
 
 const Castor = function Castor(options = {}) {
   const {
     oauth2,
-    exportLayerGroup,
+    exportLayer,
+    exportGroupLayer,
+    importLayerPadding = [200, 200, 200, 200],
+    exportAttributes = ['1', '2', '3'],
     castorImportGroupOptions,
     castorImportLayerOptions,
     realestatePropertyName,
@@ -14,6 +17,7 @@ const Castor = function Castor(options = {}) {
     importIcon = '',
     exportIcon = '',
     castorEndpoint,
+    castorNoSelection,
     castorImportSuccessMessage,
     castorImportFailMessage,
     castorImportNotFoundMessage,
@@ -42,7 +46,7 @@ const Castor = function Castor(options = {}) {
 
   if (
     !oauth2 ||
-    !exportLayerGroup ||
+    !exportLayer ||
     !castorImportGroupOptions ||
     !castorImportLayerOptions ||
     !realestatePropertyName ||
@@ -50,7 +54,7 @@ const Castor = function Castor(options = {}) {
     !castorEndpoint
   ) {
     if (!oauth2) console.error('Castor plugin: Missing config oath2');
-    if (!exportLayerGroup) console.error('Castor plugin: Missing config exportLayerGroup');
+    if (!exportLayer) console.error('Castor plugin: Missing config exportLayer');
     if (!castorImportGroupOptions) console.error('Castor plugin: Missing config castorImportGroupOptions');
     if (!castorImportLayerOptions) console.error('Castor plugin: Missing config castorImportLayerOptions');
     if (!realestatePropertyName) console.error('Castor plugin: Missing config realestatePropertyName');
@@ -135,14 +139,27 @@ const Castor = function Castor(options = {}) {
     const addedLayer = viewer.getLayer(layerName);
     const features = addedLayer.getSource().getFeatures();
     if (features && features.length) {
-      let baseExtend = features.pop().getGeometry().getExtent();
+      let baseExtent = features.pop().getGeometry().getExtent();
       features.forEach((feature) => {
-        extend(baseExtend, feature.getGeometry().getExtent());
+        extend(baseExtent, feature.getGeometry().getExtent());
       });
 
-      viewer.getMap().getView().fit(baseExtend);
-      return;
-    }
+    const view = viewer.getMap().getView();
+    const center = getCenter(baseExtent);
+    const duration = 1000; // Animation duration in milliseconds
+    
+    view.animate({
+      center: center,
+      duration: duration
+  }, () => {
+      view.fit(baseExtent, {
+          padding: importLayerPadding,
+          duration: duration
+      });
+  });
+    
+    return;
+  }
 
     if (tries < max_center_on_added_layer_retries) {
       tries++;
@@ -153,16 +170,33 @@ const Castor = function Castor(options = {}) {
 
   function exportToCastor() {
     const selectionManager = viewer.getSelectionManager();
-    const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayerGroup);
+    const items = selectionManager.getSelectedItemsForASelectionGroup(exportLayer);
+    const groupItems = selectionManager.getSelectedItemsForASelectionGroup(exportGroupLayer);
+
+    //  append groupItems to items
+    if (groupItems && groupItems.length > 0) {
+      groupItems.forEach(item => {
+        if (!items.some(x => x.feature.getId() === item.feature.getId())) {
+          items.push(item);
+        }
+      });
+    }
+
+    // Check if no items are selected
+    if (!items || items.length === 0) {
+      createToaster('fail', castorNoSelection);
+      return;
+  }
+
     const castorData = {
       destination: 'Castor',
-      name: 'Urval från kartan med lite fastigheter',
+      name: 'Selekterade fastigheter från kartan',
       selectionobjects: items.map(x => ({
         addresses: [],
         realestate: {
-          key: x.feature.get('fnr_fds').toString(),
-          name: x.feature.get('fastighet'),
-          uuid: x.feature.get('objekt_id')
+          key: x.feature.get(exportAttributes[0])?.toString() || '',
+          name: x.feature.get(exportAttributes[1]) || '',
+          uuid: x.feature.get(exportAttributes[2]) || ''
         }
       })),
       source: 'Partner',
@@ -273,7 +307,7 @@ const Castor = function Castor(options = {}) {
     },
     onAdd(evt) {
       viewer = evt.target;
-      if (!target) target = `${viewer.getMain().getNavigation().getId()}`;
+      if (!target) target = `${viewer.getMain().getMapTools().getId()}`;
       this.addComponents([castorButton, importButton, exportButton]);
       this.render();
     },
