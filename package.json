@@ -12,22 +12,22 @@
   "author": "Decerno AB",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/plugin-transform-runtime": "^7.28.3",
-    "@babel/preset-env": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/plugin-transform-runtime": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
     "babel-loader": "^10.0.0",
     "copy-webpack-plugin": "^13.0.1",
     "exports-loader": "^5.0.0",
     "imports-loader": "^5.0.0",
     "terser-webpack-plugin": "^5.3.14",
-    "webpack": "^5.101.3",
-    "webpack-bundle-analyzer": "^4.10.2",
+    "webpack": "^5.103.0",
+    "webpack-bundle-analyzer": "^5.0.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2",
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "core-js": "^3.45.1",
-    "ol": "^10.6.1"
+    "core-js": "^3.47.0",
+    "ol": "^10.7.0"
   }
 }
